@@ -24,7 +24,7 @@ class ListaLigada():
     def is_empty(self) -> bool: # Verificação de conteúdo
         return self.__tamanho == 0
 
-    def add_last(self, aluno: Aluno) -> None: # adicionar nó no fim da lista
+    def add_last(self, aluno: Aluno) -> None: # adicionar nó no fim da lista - O(1)
         new_node = Node(aluno)
         try:
             if self.is_empty():
@@ -38,7 +38,7 @@ class ListaLigada():
         except Exception as e:
             print(f'Não foi possível inserção: {e}')
 
-    def add_first(self, aluno: Aluno) -> None: # adicionar nó no começo da lista
+    def add_first(self, aluno: Aluno) -> None: # adicionar nó no começo da lista - O(1)
         new_node = Node(aluno)
         try:
             if self.is_empty():
@@ -96,7 +96,7 @@ class ListaLigada():
     def contains(self, aluno: Aluno) -> bool: # verificação de item na lista - O(n)
         return self.busca_sequencial_index() != -1
 
-    def exibe_lista(self) -> None:
+    def exibe_lista(self) -> None: # Print dos itens de cada nó
         aux = self.__cabeca
         print(f'Exibindo Lista:')
         while aux != None:
@@ -104,7 +104,7 @@ class ListaLigada():
             aux = aux.prox
         print(f'Fim da lista.')
 
-    def busca_maior(self)-> Node:
+    def busca_maior(self)-> Node: # Procura sequencial do maior item na lista. Depende de verificação de todos os itens - O(n)
         aux = self.__cauda
         maior = aux
         while aux != None:
@@ -113,7 +113,7 @@ class ListaLigada():
             aux = aux.prev
         return maior
 
-    def busca_menor(self)-> Node:
+    def busca_menor(self)-> Node: # Procura sequencial do menor item na lista. Depende de verificação de todos os itens - O(n)
         aux = self.__cabeca
         menor = aux
         while aux != None:
@@ -122,32 +122,28 @@ class ListaLigada():
             aux = aux.prox
         return menor
 
-    def ordena_lista(self) -> None:
-        def trocas(Node1, Node2)-> None:
-            n1_aux = (Node1.prev, Node1.prox)
-            n2_aux = (Node2.prev, Node2.prox)
-            Node1.prev, Node1.prox = n2_aux
-            Node2.prev, Node2.prox = n1_aux
-            
-        
+    def ordena_lista(self) -> None: # Ordenação sequencial (Bubble Sort) por conteúdo - O(n^2)
+        def trocas(node_a, node_b)-> None: # função para a troca de conteúdo entre dois Nodes
+            aux_nome , aux_nota = node_a.aluno.nome, node_a.aluno.nota
+            node_a.aluno.nome, node_a.aluno.nota = node_b.aluno.nome, node_b.aluno.nota
+            node_b.aluno.nome, node_b.aluno.nota = aux_nome , aux_nota
+
+        # encontra-se o maior e o menor item da lista para atualizar o cabeça e a cauda - 2 x O(n) = O(n)    
         menor = self.busca_menor()
         trocas(self.__cabeca, menor)
-        self.__cabeca = menor
         maior = self.busca_maior()
         trocas(self.__cauda, maior)
-        self.__cauda = maior
+
+        compara_a = self.__cabeca.prox
         
-        aux = self.__cabeca.prox
-        
-        while aux != self.__cauda:
-            
-            aux_aux = aux
-            while aux_aux != self.__cauda:
-                print('passou')
-                if aux.aluno.nota > aux_aux.aluno.nota:
-                    trocas(aux, aux_aux)
-                aux_aux = aux.prox
-            aux = aux.prox
+        # corre-se então o "miolo" da lista para ordenação - O((n-2)^2) = O(n^2)
+        while compara_a.prox != None:
+            compara_b = compara_a.prox
+            while compara_b.prox != None:
+                if compara_a.aluno.nota > compara_b.aluno.nota:
+                    trocas(compara_a, compara_b)
+                compara_b = compara_b.prox
+            compara_a = compara_a.prox
             
 
 
@@ -159,7 +155,6 @@ lista.add(2, Aluno(5, 'José'))
 lista.add(1, Aluno(4, 'Ana'))
 
 lista.exibe_lista()
-
 lista.ordena_lista()
-
+lista.exibe_lista()
 
