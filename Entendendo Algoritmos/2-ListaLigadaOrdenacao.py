@@ -2,20 +2,24 @@
 
 # Lista Ligada - Definições da estrutura
 class Aluno():
+    '''Objeto para armazenamento das informações'''
     def __init__(self, nota: int, nome: str) -> None:
         self.nota = nota
         self.nome = nome
 
 class Node():
+    '''Nós responsáveis por apontar para a memória onde se encontra o conteúdo. Os atributos 
+    prox e prev iniciam como None, pois são alocados ao serem declarados'''
     def __init__(self, aluno: Aluno, prox: Aluno = None, prev: Aluno = None) -> None:
         self.aluno = aluno
         self.prox = prox
         self.prev = prev
-        # prox e prev iniciam como None, pois são alocados ao serem declarados
+        
 
-# Estruturas da Lista Ligada em Classes
 class ListaLigada():
-    '''Classe com a montagem e ações de uma lista ligada'''
+    '''Classe com a montagem e ações de uma lista ligada. Uma lista ligada oferece complexidade benefica
+    para adição e remoção de itens não ordenados ou sequenciais - O(1) -, enquanto que oferece  
+    complexidade prejudicial para busca e ordenação - O(n^2) -'''
     def __init__(self) -> None:
         self.__cabeca = None
         self.__cauda = None
@@ -123,23 +127,23 @@ class ListaLigada():
         return menor
 
     def ordena_lista(self) -> None: # Ordenação sequencial (Bubble Sort) por conteúdo - O(n^2)
+        '''Neste caso, apenas está sendo trocado o conteúdo de Aluno dentro dos nodes, como se o Node fosse 
+        um slot de uma lista/array e trocassemos o conteúdo. No caso de trocar de fato os nodes, seria 
+        necessário reordenar os ponteiros de direção a cada if true no loop além de realizar a troca antes 
+        do duplo while do cabeça para o menor item e da cauda para o maior item, para que não se perca a 
+        referência. Logo, a troca de conteúdo é mais simples e tem a mesma complexidade'''
+
         def trocas(node_a, node_b)-> None: # função para a troca de conteúdo entre dois Nodes
             aux_nome , aux_nota = node_a.aluno.nome, node_a.aluno.nota
             node_a.aluno.nome, node_a.aluno.nota = node_b.aluno.nome, node_b.aluno.nota
             node_b.aluno.nome, node_b.aluno.nota = aux_nome , aux_nota
 
-        # encontra-se o maior e o menor item da lista para atualizar o cabeça e a cauda - 2 x O(n) = O(n)    
-        menor = self.busca_menor()
-        trocas(self.__cabeca, menor)
-        maior = self.busca_maior()
-        trocas(self.__cauda, maior)
-
-        compara_a = self.__cabeca.prox
+        compara_a = self.__cabeca
         
-        # corre-se então o "miolo" da lista para ordenação - O((n-2)^2) = O(n^2)
-        while compara_a.prox != None:
+        # corre-se a lista para ordenação - O(n^2)
+        while compara_a != None:
             compara_b = compara_a.prox
-            while compara_b.prox != None:
+            while compara_b != None:
                 if compara_a.aluno.nota > compara_b.aluno.nota:
                     trocas(compara_a, compara_b)
                 compara_b = compara_b.prox
