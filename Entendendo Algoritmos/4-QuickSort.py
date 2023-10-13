@@ -1,10 +1,14 @@
 # Capitulo 4. QuickSort - Algoritmo de ordenação conhecido por seu otimo desempenho, atuando junto à estratégia de 
 # recursão de dividir e conquistar.
 
-# Algoritmo de ordenação QuickSort de divisão do array em casos maiores e menores com base em um pivô - O melhor caso possui
-# complexidade assintótica de O(nlog(n)), que é quando o pivô selecionado condiz com a mediana do array. Já o caso médio e 
-# o pior caso possuem complexidade assintótica de O(n^2) que corresponde ao caso do pivô escolhido ser um dos máximos ou mínimos
-# do array. A posição de index escolhida também pode refletir nesse desempenho.
+# Algoritmo de ordenação QuickSort de divisão do array em casos maiores e menores com base em um pivô 
+# A complexidade assintótica varia entre 2 resultados:
+# 1. Médio e melhor caso: O(nlog(n)) - pivô no meio do array produz O(log(n)) em pilhas e O(n) em loop
+# 2. Pior caso: O(n^2) - pivô nas extremidades do array produz O(n) em pilhas e O(n) em loop
+
+# o resultado 2 acontece porque quando um pivô está na extremidade, ele concentra todo o array em apenas um
+# lado da divisão, então as recursões serão executadas n vezes para a ordenação.
+
 def quickSort(lista: list)->list:
     # no caso do array ter apenas 1 elemento, ele já está ordenado
     if len(lista) < 2:
